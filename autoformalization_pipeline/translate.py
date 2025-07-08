@@ -179,26 +179,24 @@ def translate(
                         messages= [{"role": 'user', "content": prompt}],
                         temperature=1,
                         )
+                translation = response.choices[0].message.contents
+                pattern = r'(theorem\b(?:.(?![Ll]ean4))*?by sorry)'
+                match = re.search(pattern, translation, re.DOTALL)
+
+                if match:
+                    translated.append(match.group(1)) 
+                else:
+                    error = {'natural_language': example['natural_language'],
+                            'formal_error': translation}
+                    with open(error_file, 'a', encoding='utf-8') as f:
+                        f.write(json.dumps(error, ensure_ascii=False) + "\n")
+
+                prompt_tokens += response.usage.prompt_tokens
+                completion_tokens += response.usage.completion_tokens
+                total_tokens += response.usage.total_tokens
             except Exception as e:
                 print(f"API 调用失败: {e}")
 
-            
-            translation = response.choices[0].message.contents
-            pattern = r'(theorem\b(?:.(?![Ll]ean4))*?by sorry)'
-            match = re.search(pattern, translation, re.DOTALL)
-
-            if match:
-                translated.append(match.group(1)) 
-            else:
-                error = {'natural_language': example['natural_language'],
-                        'formal_error': translation}
-                with open(error_file, 'a', encoding='utf-8') as f:
-                    f.write(json.dumps(error, ensure_ascii=False) + "\n")
-
-            prompt_tokens += response.usage.prompt_tokens
-            completion_tokens += response.usage.completion_tokens
-            total_tokens += response.usage.total_tokens
-        
         translated_sentences.append({'natural_language': example['natural_language'],
                                     'formal_output': translated})
 

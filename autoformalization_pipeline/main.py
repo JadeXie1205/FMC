@@ -18,7 +18,7 @@ from backtranslate import backtranslate
 from nli import nli
 
 
-# nohup python main.py --question-file data.json --answer-root log > output.log
+# nohup python main.py --question-file data.json --answer-file log > output.log
 # main: run needs revision
 # translate, backtranslate, nli: API log dir needs revision
 
