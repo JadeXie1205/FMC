@@ -18,7 +18,7 @@ from backtranslate import backtranslate
 from nli import nli
 
 
-# nohup python main.py --question-file data.json --answer-root log > output.log
+# nohup python main.py --question-file data.json --answer-file log > output.log
 
 ################################### deepseek-r1 ##########################################
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
         help="The name of the benchmark question set.",
     )
     parser.add_argument(
-        "--answer-root",
+        "--answer-file",
         type=str,
         default=None,
         help="The output answer file.",
@@ -68,14 +68,14 @@ if __name__ == "__main__":
     print('##################' + str(torch.cuda.is_available()))
     print(os.environ["CUDA_VISIBLE_DEVICES"])
 
-    print(f"Output to {args.answer_root}")
+    print(f"Output to {args.answer_file}")
     print(f"Num Questions: {len(questions)}")
 
 
     batch_size=20
 
-    os.makedirs(os.path.dirname(args.answer_root), exist_ok=True)
-    answer_root = os.path.dirname(args.answer_root)
+    os.makedirs(os.path.dirname(args.answer_file), exist_ok=True)
+    answer_root = os.path.dirname(args.answer_file)
     save_root = answer_root + '/'
     save_path = save_root + f'filtered_trans.json'
 
